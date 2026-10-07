@@ -14,4 +14,7 @@ while IFS= read -r source; do
     *.bicep) az bicep build --file "$source" --outfile "$target" ;;
   esac
 done < <(find modules tests -type f \( -name '*.bicep' -o -name '*.bicepparam' \) | sort)
-python3 tests/storage-account/verify.py
+shopt -s nullglob
+for verify in tests/*/verify.py; do
+  python3 "$verify"
+done
